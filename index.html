@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Time Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+    min-height: 100vh;
+    background: 
+        linear-gradient(rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
+        url("https://images.unsplash.com/photo-1501139083538-0139583c060f");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+        .container {
+            background: #6da3e9;
+            width: 380px;
+            padding: 30px;
+            border-radius: 40px; 
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #000;
+            margin-bottom: 25px;
+        }
+
+        .box {
+            margin-bottom: 30px;
+        }
+
+        .box h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .time-display {
+            font-size: 32px;
+            font-weight: bold;
+            background: #f1f5ff;
+            padding: 15px;
+            border-radius: 12px;
+            letter-spacing: 2px;
+        }
+
+        .buttons {
+            margin-top: 15px;
+        }
+
+        .buttons button {
+            margin: 6px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #2a5298;
+            color: #fff;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .buttons button:hover {
+            background: #1e3c72;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Smart Time Hub</h1>
+
+    <!-- DIGITAL CLOCK -->
+    <div class="box">
+        <h2>Digital Clock</h2>
+        <div id="clock" class="time-display">00:00:00</div>
+    </div>
+
+    <!-- STOPWATCH -->
+    <div class="box">
+        <h2>Stopwatch</h2>
+        <div id="stopwatch" class="time-display">00:00:00</div>
+
+        <div class="buttons">
+            <button onclick="startStopwatch()">Start</button>
+            <button onclick="stopStopwatch()">Stop</button>
+            <button onclick="resetStopwatch()">Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* DIGITAL CLOCK */
+    function updateClock() {
+        const now = new Date();
+        let h = now.getHours();
+        let m = now.getMinutes();
+        let s = now.getSeconds();
+
+        h = h < 10 ? "0" + h : h;
+        m = m < 10 ? "0" + m : m;
+        s = s < 10 ? "0" + s : s;
+
+        document.getElementById("clock").innerText = h + ":" + m + ":" + s;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    /* STOPWATCH */
+    let swInterval = null;
+    let sec = 0, min = 0, hr = 0;
+
+    function startStopwatch() {
+        if (swInterval === null) {
+            swInterval = setInterval(() => {
+                sec++;
+
+                if (sec === 60) {
+                    sec = 0;
+                    min++;
+                }
+                if (min === 60) {
+                    min = 0;
+                    hr++;
+                }
+
+                document.getElementById("stopwatch").innerText =
+                    format(hr) + ":" + format(min) + ":" + format(sec);
+            }, 1000);
+        }
+    }
+
+    function stopStopwatch() {
+        clearInterval(swInterval);
+        swInterval = null;
+    }
+
+    function resetStopwatch() {
+        stopStopwatch();
+        sec = min = hr = 0;
+        document.getElementById("stopwatch").innerText = "00:00:00";
+    }
+
+    function format(val) {
+        return val < 10 ? "0" + val : val;
+    }
+</script>
+
+</body>
+</html>
